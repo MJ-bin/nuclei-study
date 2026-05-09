@@ -1,0 +1,52 @@
+id: lab-multi-step-login
+
+info:
+  name: Lab Multi Step Login With Internal Extractor
+  author: local
+  severity: medium
+  description: Extracts a CSRF token from the login page and reuses it in the login request.
+  tags: lab,auth,complex,poc,extractor
+
+http:
+  - raw:
+      - |
+        GET /login HTTP/1.1
+        Host: {{Hostname}}
+
+      - |
+        POST /api/login HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded
+
+        username=admin&password=public-demo-login-password&csrf={{csrf}}
+
+    cookie-reuse: true
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header_2
+        words:
+          - "X-Auth-Result: ok"
+
+      - type: word
+        part: body_2
+        words:
+          - '"authenticated": true'
+          - '"session_token": "public-demo-session-token"'
+        condition: and
+
+    extractors:
+      - type: regex
+        name: csrf
+        part: body_1
+        group: 1
+        regex:
+          - 'name="csrf" value="([^"]+)"'
+        internal: true
+
+      - type: regex
+        name: session_token
+        part: body_2
+        group: 1
+        regex:
+          - '"session_token":\s*"([^"]+)"'

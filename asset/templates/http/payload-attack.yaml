@@ -1,0 +1,32 @@
+id: lab-payload-attack
+
+info:
+  name: Lab Payload Attack Mode
+  author: local
+  severity: info
+  description: Tries multiple API tokens and stops when the valid token is found.
+  tags: lab,payload,auth
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/private"
+    headers:
+      X-Lab-Auth: "{{token}}"
+    attack: batteringram
+    payloads:
+      token:
+        - wrong-token
+        - public-demo-api-token
+    stop-at-first-match: true
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "private config visible"

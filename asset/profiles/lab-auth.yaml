@@ -1,0 +1,4 @@
+templates:
+  - asset/templates/http
+tags:
+  - auth

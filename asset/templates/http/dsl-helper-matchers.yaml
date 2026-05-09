@@ -1,0 +1,21 @@
+id: lab-dsl-helper-matchers
+
+info:
+  name: Lab DSL Helper Matchers
+  author: local
+  severity: info
+  description: Uses DSL helper functions to match the debug endpoint.
+  tags: lab,debug,dsl,helper
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/debug"
+
+    matchers:
+      - type: dsl
+        condition: and
+        dsl:
+          - "status_code == 200"
+          - "contains(to_lower(body), 'acmenotes')"
+          - "contains(header, 'X-Debug-Mode: enabled')"

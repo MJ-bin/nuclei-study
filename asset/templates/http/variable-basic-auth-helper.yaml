@@ -1,0 +1,30 @@
+id: lab-variable-basic-auth-helper
+
+info:
+  name: Lab Variable Basic Auth Helper
+  author: local
+  severity: info
+  description: Builds a Basic Authorization header with variables and DSL helpers.
+  tags: lab,auth,basicauth,helper,vars
+
+variables:
+  username: lab
+  password: public-demo-basic-password
+
+http:
+  - raw:
+      - |
+        GET /basic-only HTTP/1.1
+        Host: {{Hostname}}
+        Authorization: Basic {{base64(concat(username, ":", password))}}
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "basic-only area visible"

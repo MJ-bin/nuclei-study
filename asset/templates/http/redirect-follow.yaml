@@ -1,0 +1,24 @@
+id: lab-redirect-follow
+
+info:
+  name: Lab Redirect Follow
+  author: local
+  severity: info
+  description: Matches the login page only when redirects are followed.
+  tags: lab,redirect,http
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "<h1>Login</h1>"

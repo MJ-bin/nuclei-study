@@ -1,0 +1,7 @@
+templates:
+  - asset/templates/http
+tags:
+  - lab
+exclude-tags:
+  - dos
+  - dangerous

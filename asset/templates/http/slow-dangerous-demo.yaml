@@ -1,0 +1,19 @@
+id: lab-slow-dangerous-demo
+
+info:
+  name: Lab Slow Dangerous Demo
+  author: local
+  severity: info
+  description: Slow endpoint used to demonstrate rate limits and exclusion filters.
+  tags: lab,dos,dangerous
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/slow"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "slow endpoint reached"

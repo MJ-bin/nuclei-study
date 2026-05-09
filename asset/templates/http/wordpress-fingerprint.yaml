@@ -1,0 +1,26 @@
+id: lab-wordpress-fingerprint
+
+info:
+  name: Lab WordPress Looking Fingerprint
+  author: local
+  severity: info
+  description: Detects WordPress-looking markers in the local lab.
+  tags: lab,tech,wordpress
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-login.php"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "wp-submit"
+          - "wp-core-ui"
+        condition: and

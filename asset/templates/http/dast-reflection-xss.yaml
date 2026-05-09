@@ -1,0 +1,38 @@
+id: lab-dast-reflection-xss
+
+info:
+  name: Lab DAST Reflection XSS Probe
+  author: local
+  severity: low
+  description: Fuzzes GET query values and detects reflected HTML probes.
+  tags: lab,dast,fuzz,xss
+
+http:
+  - pre-condition:
+      - type: dsl
+        dsl:
+          - 'method == "GET"'
+
+    payloads:
+      reflection:
+        - "6842'\"><9967"
+
+    stop-at-first-match: true
+    fuzzing:
+      - part: query
+        type: postfix
+        mode: single
+        fuzz:
+          - "{{reflection}}"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "{{reflection}}"
+
+      - type: word
+        part: header
+        words:
+          - "text/html"

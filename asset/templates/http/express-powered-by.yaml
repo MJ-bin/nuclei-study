@@ -1,0 +1,24 @@
+id: lab-express-powered-by
+
+info:
+  name: Lab Express Powered By Fingerprint
+  author: local
+  severity: info
+  description: Detects an Express-looking X-Powered-By header in the local lab.
+  tags: lab,tech,express
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: header
+        words:
+          - "X-Powered-By: Express"

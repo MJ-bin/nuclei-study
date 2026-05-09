@@ -1,0 +1,39 @@
+id: lab-debug-complete-poc
+
+info:
+  name: Lab Debug Endpoint Complete PoC
+  author: local
+  severity: low
+  description: Detects the local debug endpoint with status, header, and body evidence.
+  tags: lab,debug,poc,exposure
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/debug"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: header
+        words:
+          - "X-Debug-Mode: enabled"
+
+      - type: word
+        part: body
+        words:
+          - '"app": "AcmeNotes"'
+          - '"debug": true'
+        condition: and
+
+    extractors:
+      - type: regex
+        name: lab_version
+        part: body
+        group: 1
+        regex:
+          - '"version":\s*"([^"]+)"'
