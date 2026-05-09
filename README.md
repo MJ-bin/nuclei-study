@@ -1,1 +1,1 @@
-# git-study
+# nuclei-study
